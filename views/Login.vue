@@ -19,20 +19,30 @@
       <p v-if="error" class="error">Has introducido mal el email o la contraseña.</p>
       <input class="form-submit" type="submit" value="Login">
     </form>
+    <p class="msg"> ¿No tienes cuenta?
+        <router-link to = "/register">Regístrate</router-link>
+    </p>
   </div>
 </template>
 
 <script>
+import auth from "@/logic/auth";
+import Router from '../router.vue';
 export default {
     data: () => ({
         email: "",
-        password: ""
+        password: "",
+        error: false
     }),
     //metodos para enviar la petición de login
     methods: {
-        login() {
-            console.log(this.email);
-            console.log(this.password);
+        async login() {
+            try {
+                await auth.login(this.email, this.password);
+                this.$router.push("/");
+            } catch (error) {
+                this.error = true;
+            }
         }
     }
 };
